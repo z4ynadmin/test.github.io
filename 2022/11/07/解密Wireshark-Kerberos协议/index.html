@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang=zh-CN>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:description" content="z4yn的博客">
+    <meta property="og:type" content="website">
+    <meta name="description" content="z4yn的博客">
+    <meta name="keyword"  content="OSCP,PTE">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        解密Wireshark Kerberos协议 - Z4yn&#39;s blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/aircloud.css">
+
+    
+<link rel="stylesheet" href="/css/gitment.css">
+
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_28hi1hpxx24.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Z4yn's blog" type="application/atom+xml">
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> Better to light one candle than to curse the darkness. </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>Z4yn&#39;s blog</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/collect/">
+                    <i class="iconfont icon-shoucang1"></i>
+                    <span>收藏</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%8E%9F%E5%A7%8B%E6%8A%A5%E6%96%87"><span class="toc-text">#1 原始报文</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%9F%9F%E6%8E%A7%E5%AF%BC%E5%87%BANTDS-dit%E5%92%8CSYSTEM%E6%96%87%E4%BB%B6"><span class="toc-text">#2 域控导出NTDS.dit和SYSTEM文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-kali%E5%AE%89%E8%A3%85-libesedb-utils"><span class="toc-text">#3 kali安装 libesedb-utils</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-git-%E5%85%8B%E9%9A%86-ntdsxtract"><span class="toc-text">#4 git 克隆 ntdsxtract</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-python2-%E5%AE%89%E8%A3%85-pycryptodome"><span class="toc-text">#5 python2 安装 pycryptodome</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E6%8F%90%E5%8F%96%E5%87%BA%E5%A4%9A%E4%B8%AA%E6%96%87%E4%BB%B6%EF%BC%8C%E5%9C%A8ntds-dit-export%E7%9B%AE%E5%BD%95%E4%B8%8B-%E8%BF%99%E4%B8%AA%E6%AD%A5%E9%AA%A4%E7%AD%89%E5%BE%85%E7%9A%84%E6%97%B6%E9%97%B4%E8%BE%83%E9%95%BF"><span class="toc-text">#6 提取出多个文件，在ntds.dit.export目录下  (这个步骤等待的时间较长)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E6%8F%90%E5%8F%96%E5%87%BA-keytab%E6%96%87%E4%BB%B6"><span class="toc-text">#7 提取出 keytab文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-Wireshark-%E5%AF%BC%E5%85%A5keytab%E6%96%87%E4%BB%B6-%E7%BC%96%E8%BE%91-gt-%E9%A6%96%E9%80%89%E9%A1%B9-gt-Protocols-gt-KRB5"><span class="toc-text">#8 Wireshark 导入keytab文件  编辑-&gt;首选项-&gt;Protocols-&gt;KRB5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-%E8%A7%A3%E5%AF%86enc-part%E9%83%A8%E5%88%86%EF%BC%8C%E5%B0%B1%E8%83%BD%E7%9C%8B%E5%88%B0-Login-session-key%E3%80%82"><span class="toc-text">#9 解密enc-part部分，就能看到 Login session key。</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-bg" id="search-bg"></div>
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> Better to light one candle than to curse the darkness. </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        解密Wireshark Kerberos协议
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2022-11-07 14:50:26</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#Kerberos" title="Kerberos">Kerberos</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#Wireshark" title="Wireshark">Wireshark</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <h3 id="1-原始报文"><a href="#1-原始报文" class="headerlink" title="#1 原始报文"></a>#1 原始报文</h3><p><img src="https://z4admin.s3.ap-northeast-1.amazonaws.com//images/2022/09/61e61014277a2683611a32ab5cac7a31.png" alt="image-20220908162617609"></p>
+<h3 id="2-域控导出NTDS-dit和SYSTEM文件"><a href="#2-域控导出NTDS-dit和SYSTEM文件" class="headerlink" title="#2 域控导出NTDS.dit和SYSTEM文件"></a>#2 域控导出NTDS.dit和SYSTEM文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vssadmin create shadow /<span class="keyword">for</span>=C:</span><br><span class="line">copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy1\Windows\NTDS\NTDS.dit C:\ntds.dit</span><br><span class="line">copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy1\Windows\System32\config\SYSTEM C:\system.hive</span><br><span class="line">vssadmin delete shadows /all</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://z4admin.s3.ap-northeast-1.amazonaws.com//images/2022/09/d66f5857b61f15723e33afdcd5213463.png" alt="image-20220908162947619"></p>
+<h3 id="3-kali安装-libesedb-utils"><a href="#3-kali安装-libesedb-utils" class="headerlink" title="#3 kali安装 libesedb-utils"></a>#3 kali安装 libesedb-utils</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt <span class="keyword">install</span> libesedb-utils</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4-git-克隆-ntdsxtract"><a href="#4-git-克隆-ntdsxtract" class="headerlink" title="#4 git 克隆 ntdsxtract"></a>#4 git 克隆 ntdsxtract</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/csababarta/ntdsxtract.git</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://z4admin.s3.ap-northeast-1.amazonaws.com//images/2022/09/c95f93fce535f8dd4a118dcfbd6c845d.png" alt="image-20220908164711048"></p>
+<h3 id="5-python2-安装-pycryptodome"><a href="#5-python2-安装-pycryptodome" class="headerlink" title="#5 python2 安装 pycryptodome"></a>#5 python2 安装 pycryptodome</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python2 -m pip <span class="keyword">install</span> pycryptodome</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://z4admin.s3.ap-northeast-1.amazonaws.com//images/2022/09/c6825d7e4ef926a122fadb194c9ee5d4.png" alt="image-20220908163452363"></p>
+<h3 id="6-提取出多个文件，在ntds-dit-export目录下-这个步骤等待的时间较长"><a href="#6-提取出多个文件，在ntds-dit-export目录下-这个步骤等待的时间较长" class="headerlink" title="#6 提取出多个文件，在ntds.dit.export目录下  (这个步骤等待的时间较长)"></a>#6 提取出多个文件，在ntds.dit.export目录下  <strong>(这个步骤等待的时间较长)</strong></h3><p><img src="https://z4admin.s3.ap-northeast-1.amazonaws.com//images/2022/09/11117420d4fa5afa32fc314c3014a20c.png" alt="image-20220908163632883"></p>
+<p><img src="https://z4admin.s3.ap-northeast-1.amazonaws.com//images/2022/09/e25c82cdcf4c7066ce0df15edb81d62f.png" alt="image-20220908164504631"></p>
+<h3 id="7-提取出-keytab文件"><a href="#7-提取出-keytab文件" class="headerlink" title="#7 提取出 keytab文件"></a>#7 提取出 keytab文件</h3><p><img src="https://z4admin.s3.ap-northeast-1.amazonaws.com//images/2022/09/45617889359798fc34465d860c4a1a55.png" alt="image-20220908164816450"></p>
+<h3 id="8-Wireshark-导入keytab文件-编辑-gt-首选项-gt-Protocols-gt-KRB5"><a href="#8-Wireshark-导入keytab文件-编辑-gt-首选项-gt-Protocols-gt-KRB5" class="headerlink" title="#8 Wireshark 导入keytab文件  编辑-&gt;首选项-&gt;Protocols-&gt;KRB5"></a>#8 Wireshark 导入keytab文件  编辑-&gt;首选项-&gt;Protocols-&gt;KRB5</h3><img src="https://z4admin.s3.ap-northeast-1.amazonaws.com//images/2022/09/81e818b81cc454398a7bac9019ae6b18.png" alt="image-20220908164946014" style="zoom:33%;" />
+
+
+
+<h3 id="9-解密enc-part部分，就能看到-Login-session-key。"><a href="#9-解密enc-part部分，就能看到-Login-session-key。" class="headerlink" title="#9 解密enc-part部分，就能看到 Login session key。"></a>#9 解密enc-part部分，就能看到 Login session key。</h3><p><img src="https://z4admin.s3.ap-northeast-1.amazonaws.com//images/2022/09/531a7ef9dbdd758a6631f5d0265a5cb9.png" alt="image-20220908165522558"></p>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+        <div id="lv-container"></div>
+        <div class="giscus"></div>
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+</html>
